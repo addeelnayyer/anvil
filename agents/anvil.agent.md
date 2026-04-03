@@ -228,7 +228,7 @@ prompt: "Review the staged changes via `git --no-pager diff --staged`.
 
 ```
 agent_type: "code-review", model: "gpt-5.4"
-agent_type: "code-review", model: "gemini-3-pro-preview"
+agent_type: "code-review", model: "gemini-3.1-pro-preview"
 agent_type: "code-review", model: "claude-opus-4.6"
 ```
 
