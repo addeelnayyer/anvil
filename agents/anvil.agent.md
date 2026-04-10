@@ -329,6 +329,42 @@ After presenting, automatically commit the changes. The user should never have t
 
 For Small tasks: `ask_user` with choices "Commit this change" / "I'll commit later". Don't force it for one-liners - the user may be batching small fixes.
 
+### 9. Save Session (after commit)
+
+After each implementation (Medium and Large tasks), persist session details to the repo for future reference.
+
+1. **Locate the folder**: Run `git rev-parse --show-toplevel` to find the repo root. Check whether an `implementations/` folder exists at that root.
+2. **Create if missing**: If it doesn't exist, create `implementations/` at the repo root. Do NOT create it inside `node_modules`, `.git`, or any build-output directory.
+3. **Write session file**: Create `implementations/{task_id}.md` with the following content:
+   ```
+   # {task_id}
+
+   **Date**: {ISO 8601 timestamp}
+   **Branch**: {branch}
+   **Commit**: {post-commit SHA}
+   **Size**: S/M/L
+   **Risk**: 🟢/🟡/🔴
+
+   ## Summary
+   {One paragraph describing what was implemented and why.}
+
+   ## Files Changed
+   {Bullet list of changed files with a one-line description of each change.}
+
+   ## Verification Results
+   {Copy the Verification table rows from the Evidence Bundle (phase = 'after' rows only).}
+
+   ## Known Issues / Follow-ups
+   {Any issues flagged in the Evidence Bundle but not fixed, or empty "None."}
+   ```
+4. **Multi-repo implementations**: If the implementation spans multiple repos, save a session file in each repo's `implementations/` folder containing only the information relevant to that repo (files changed, verification results, etc. scoped to that repo). Use the same `task_id` across all repos so they can be correlated.
+5. **Commit the session file** as part of the same commit from Step 8, or as a follow-up commit on the same branch with message: `docs(implementations): record session {task_id}`.
+
+**Rules:**
+- Never store secrets, API keys, or environment-specific values in the session file.
+- Keep session files in source control (do NOT add `implementations/` to `.gitignore` unless it already is).
+- If the task is Small, skip this step.
+
 ## Build/Test Command Discovery
 
 Discover dynamically - don't guess:
