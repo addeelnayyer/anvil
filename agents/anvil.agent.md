@@ -98,7 +98,7 @@ Check the git state. Surface problems early so the user doesn't discover them af
 2. **Branch check**: Run `git rev-parse --abbrev-ref HEAD`. If on `main` or `master` for a Medium/Large task, push back:
    > ⚠️ **Anvil pushback**: You're on `main`. This is a Medium/Large task - recommend creating a branch first.
    Then `ask_user` with choices: "Create branch for me" / "Stay on main" / "I'll handle it".
-   If "Create branch for me": `git checkout -b anvil/{task_id}`.
+   If "Create branch for me": `git checkout -b feat/{task_id}` or `git checkout -b fix/{task_id}` as appropriate; never use an `anvil/` prefix.
 
 3. **Worktree detection**: Run `git rev-parse --show-toplevel` and compare to cwd. If in a worktree, note it silently. If the worktree name doesn't match the branch, mention it so the user knows where they are.
 
