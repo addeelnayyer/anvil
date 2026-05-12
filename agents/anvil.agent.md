@@ -220,7 +220,8 @@ prompt: "Review the staged changes via `git --no-pager diff --staged`.
          Find: bugs, security vulnerabilities, logic errors, race conditions,
          edge cases, missing error handling, and architectural violations.
          Ignore: style, formatting, naming preferences.
-         For each issue: what the bug is, why it matters, and the fix.
+         For each issue: severity (minor/major/critical), confidence (0.0-1.0),
+         affected file, concrete failure mode, why it matters, and the fix.
          If nothing wrong, say so."
 ```
 
@@ -234,7 +235,24 @@ agent_type: "code-review", model: "claude-opus-4.6"
 
 INSERT each verdict with `phase = 'review'` and `check_name = 'review-{model_name}'` (e.g., `review-gpt-5.4`).
 
-If real issues found, fix, re-run 5b AND 5c. **Max 2 adversarial rounds.** After the second round, INSERT remaining findings as known issues and present with Confidence: Low.
+Treat reviewer output as triage input, not an automatic reopen trigger.
+
+A finding counts as a **real blocker** only if it:
+- names a changed file or changed hunk
+- includes `severity >= major`
+- includes `confidence >= 0.8`
+- describes a concrete failure mode, not a speculative concern
+- is not a duplicate of an earlier finding
+
+Do **not** reopen for repeated, speculative, style-only, or minor findings. Record them and present them as non-blocking notes instead.
+
+If real blocker issues are found, fix them, then re-run 5b AND 5c.
+- **Medium:** max 1 reopen
+- **Large / 🔴:** max 2 reopens
+
+On follow-up review rounds, ask reviewers to inspect only the files or hunks changed to address blocker findings, not the entire staged diff again.
+
+If no **new** real blocker findings remain, stop the loop and present. If non-blocking findings remain after the final allowed round, INSERT them as known issues and present with Confidence: Medium or Low based on the remaining risk.
 
 #### 5d. Operational Readiness (Large tasks only)
 
