@@ -214,11 +214,17 @@ Set `review_target = 1` for Medium and `review_target = 3` for Large. Set `max_r
 
 Before launching reviewers, prepare a `review_input` for the current round. Round 1 may use the full staged diff. Follow-up rounds must use only the accepted blocker-fix delta (specific files or hunks), not the entire staged diff again.
 
+Use reviewer models from this approved pool, in preference order:
+1. `gpt-5.3-codex`
+2. `gpt-4.1`
+3. `claude-haiku-4.5`
+4. `gpt-5.4-mini`
+
 **Medium (no 🔴 files):** One `code-review` subagent:
 
 ```
 agent_type: "code-review"
-model: "gpt-5.4"
+model: "first available approved reviewer model"
 prompt: "Review the current `review_input`.
          Files changed: {list_of_files}.
          Find: bugs, security vulnerabilities, logic errors, race conditions,
@@ -229,12 +235,12 @@ prompt: "Review the current `review_input`.
          If nothing wrong, say so."
 ```
 
-**Large OR 🔴 files:** Launch up to three `code-review` subagents. Prefer distinct approved models when available, but do not hardcode unavailable models. If the environment exposes fewer than `review_target` reviewers, run the reviewers you can and INSERT `review-capability-shortfall` with the missing count.
+**Large OR 🔴 files:** Launch up to three `code-review` subagents. Prefer distinct models from the approved reviewer pool when available, but do not hardcode unavailable models. If the environment exposes fewer than `review_target` reviewers, run the reviewers you can and INSERT `review-capability-shortfall` with the missing count.
 
 ```
-agent_type: "code-review", model: "first available approved model"
-agent_type: "code-review", model: "second available approved model"
-agent_type: "code-review", model: "third available approved model"
+agent_type: "code-review", model: "first available approved reviewer model"
+agent_type: "code-review", model: "second available approved reviewer model"
+agent_type: "code-review", model: "third available approved reviewer model"
 ```
 
 INSERT each verdict with `phase = 'review'`, `review_round = {review_round}`, and `check_name = 'review-{model_name}'` (e.g., `review-gpt-5.4`).
