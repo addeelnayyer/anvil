@@ -220,6 +220,8 @@ Use reviewer models from this approved pool, in preference order:
 3. `claude-haiku-4.5`
 4. `gpt-5.4-mini`
 
+Never select `sonnet`, `opus`, or `gpt-5.5` for code review.
+
 **Medium (no 🔴 files):** One `code-review` subagent:
 
 ```
