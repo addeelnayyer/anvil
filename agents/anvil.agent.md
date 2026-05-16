@@ -216,7 +216,7 @@ Before launching reviewers, prepare a `review_input` for the current round. Roun
 
 Use reviewer models from this approved pool, in preference order:
 1. `gpt-5.3-codex`
-2. `gpt-4.1`
+2. `gpt-5.2`
 3. `claude-haiku-4.5`
 4. `gpt-5.4-mini`
 
