@@ -216,11 +216,10 @@ Before launching reviewers, prepare a `review_input` for the current round. Roun
 
 Use reviewer models from this approved pool, in preference order:
 1. `gpt-5.3-codex`
-2. `gpt-5.2`
-3. `claude-haiku-4.5`
-4. `gpt-5.4-mini`
+2. `claude-haiku-4.5`
+3. `gpt-5.4-mini`
 
-Never select `sonnet`, `opus`, or `gpt-5.5` for code review.
+Never select `claude-sonnet-4.6`, `opus-4.6`, `opus-4.7`, or `gpt-5.5` models for code reviewer.
 
 **Medium (no 🔴 files):** One `code-review` subagent:
 
